@@ -1,81 +1,69 @@
 import React, { Component } from 'react';
-import './App.scss';
+import '../src/App.scss';
+import 'bulma/css/bulma.css';
+import { Link } from 'react-router-dom';
 
-import {Link, Switch, Route} from 'react-router-dom';
 
-import Popin from './components/Popin.js';
+import {Switch, Route} from 'react-router-dom';
+
+import Home from './components/Home.js';
 
 import Signup from './components/auth/Signup.js';
 import Login from './components/auth/Login.js';
-import Profile from './components/auth/Profile.js';
-import AuthService from './components/auth/auth-service.js';
+import Category from './components/dashboard/Category.js';
+import CategoryLogged from './components/dashboard/CategoryLogged.js';
+import NewPlace from './components/dashboard/NewPlace.js';
+import Place from './components/dashboard/Place.js';
+// import Profile from './components/auth/Profile.js';
+// import AuthService from './components/auth/auth-service.js';
 
 class App extends Component {
   state = {
     user: null
   };
 
-  service = new AuthService();
+  // service = new AuthService();
 
-  fetchUser = () => {
-    if (this.state.user === null ) {
-      this.service.loggedin()
-        .then(response => this.setState({user: response}))
-        .catch(err => this.setState({user: false}))
-      ;
-    }
-  };
+  // fetchUser = () => {
+  //   if (this.state.user === null ) {
+  //     this.service.loggedin()
+  //       .then(response => this.setState({user: response}))
+  //       .catch(err => this.setState({user: false}))
+  //     ;
+  //   }
+  // };
 
-  updateUser = (data) => {
-    this.setState({user: data});
-  };
+  // updateUser = (data) => {
+  //   this.setState({user: data});
+  // };
 
-  componentDidMount() {
-    this.fetchUser();
-  }
+  // componentDidMount() {
+  //   this.fetchUser();
+  // }
 
   render() {
     return (
-      <Route render={props => (
+      <Route render={(props) => (
         <div className="App" data-route={props.location.pathname}>
-
-          <Switch>
-            <Route exact path="/" render={() => (
-              <>
-                {this.state.user && this.state.user._id ? (
-                  <Profile user={this.state.user} updateUser={this.updateUser} />
-                ) : (
-                  <Popin one={(
-                    <>
-                      <h1>IronProfile</h1>
-                      <p>Today we will create an app with authorization, adding some cool styles !</p>
-          
-                      <div className="cta">
-                        <Link className="btn" to="/signup">Sign up</Link>
-                        <Link className="btn" to="/login">Log in</Link>
-                      </div>
-                    </>
-                  )} />
-                )}
-              </>
-            )} />
-
-            <Route exact path="/signup" render={(props) => (
-              <Signup updateUser={this.updateUser} history={props.history} />
-            )} />
-
-            <Route exact path="/login" render={(props) => (
-              <Login updateUser={this.updateUser} history={props.history} />
-            )} />
-          </Switch>
-
-          
-
-          
+            <Switch>
+              <Route exact path="/" component={Home}/>
+              <Route exact path="/signup" component={Signup} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/dashboard" component={Category} />
+              <Route exact path="/dashboard/logged" component={CategoryLogged} />
+              <Route exact path="/places/new" component={NewPlace} />
+              <Route exact path="/places/id" component={Place} />
+              {/* <Route exact path="/:user_id" component={Dashboard} /> */}
+              {/* <Route exact path="/places/:category" component={Places} />
+              <Route exact path="/places/:id" component={PlaceDetails} />
+              <Route exact path="/places/new" component={NewPlace} /> */}
+            </Switch>
         </div>
       )} />
     );
   }
 }
+
+
 
 export default App;
